@@ -170,8 +170,8 @@ func (m Model) FullHelpView(groups [][]key.Binding) string {
 		out []string
 
 		totalWidth int
-		sep        = m.Styles.FullSeparator.Render(m.FullSeparator)
-		sepWidth   = lipgloss.Width(sep)
+		separator  = m.Styles.FullSeparator.Render(m.FullSeparator)
+		sepWidth   = lipgloss.Width(separator)
 	)
 
 	// Iterate over groups to build columns
@@ -181,9 +181,14 @@ func (m Model) FullHelpView(groups [][]key.Binding) string {
 		}
 
 		var (
+			sep          string
 			keys         []string
 			descriptions []string
 		)
+
+		if totalWidth > 0 && i < len(groups) {
+			sep = separator
+		}
 
 		// Separate keys and descriptions into different slices
 		for _, kb := range group {
@@ -195,8 +200,9 @@ func (m Model) FullHelpView(groups [][]key.Binding) string {
 		}
 
 		col := lipgloss.JoinHorizontal(lipgloss.Top,
+			sep,
 			m.Styles.FullKey.Render(strings.Join(keys, "\n")),
-			m.Styles.FullKey.Render(" "),
+			" ",
 			m.Styles.FullDesc.Render(strings.Join(descriptions, "\n")),
 		)
 
